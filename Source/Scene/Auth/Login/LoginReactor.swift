@@ -21,16 +21,19 @@ final class LoginReactor: Reactor, Stepper{
     enum Action{
         case updateUserID(String)
         case updatePassword(String)
+        case pwdVisiblityButtonDidTap
         case loginButtonDidTap
         case toRegisterButtonDidTap
     }
     enum Mutation{
         case setUserID(String)
         case setPassword(String)
+        case setPwdVisible
     }
     struct State{
         var userID: String = ""
         var password: String = ""
+        var pwdVisible: Bool = false
     }
     
     var initialState: State = State()
@@ -45,6 +48,8 @@ extension LoginReactor{
             return .just(.setUserID(id))
         case .updatePassword(let pwd):
             return .just(.setPassword(pwd))
+        case .pwdVisiblityButtonDidTap:
+            return .just(.setPwdVisible)
         case .loginButtonDidTap:
             
             return .empty()
@@ -64,6 +69,8 @@ extension LoginReactor{
             newState.userID = id
         case let .setPassword(pwd):
             newState.password = pwd
+        case .setPwdVisible:
+            newState.pwdVisible = !currentState.pwdVisible
         }
         return newState
     }
