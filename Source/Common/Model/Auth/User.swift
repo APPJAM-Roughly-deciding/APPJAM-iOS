@@ -11,3 +11,8 @@ struct RegisterUser: Codable{
     let password: String
     let nickname: String
 }
+
+struct LoginUser: Codable{
+    let userid: String
+    let password: String
+}

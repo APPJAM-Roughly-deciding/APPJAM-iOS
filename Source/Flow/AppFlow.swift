@@ -51,6 +51,8 @@ final class AppFlow: Flow{
             return coordinateToLogin()
         case .registerNicknameIsRequired:
             return coordinateToRegister()
+        case .mainTabbarIsRequired:
+            return coordinateToMain()
         default:
             return .none
         }
@@ -74,6 +76,14 @@ private extension AppFlow{
             self.rootWindow.rootViewController = root
         }
         let nextStep = OneStepper(withSingleStep: APPJAMStep.registerNicknameIsRequired)
+        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: nextStep))
+    }
+    func coordinateToMain() -> FlowContributors{
+        let flow = MainFlow()
+        Flows.use(flow, when: .created) { [unowned self] root in
+            self.rootWindow.rootViewController = root
+        }
+        let nextStep = OneStepper(withSingleStep: APPJAMStep.mainTabbarIsRequired)
         return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: nextStep))
     }
 }

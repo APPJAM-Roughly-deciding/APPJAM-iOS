@@ -26,7 +26,6 @@ final class LoginReactor: Reactor, Stepper{
         case toRegisterButtonDidTap
         case autoLoginDidTap
         case guestDidTap
-
     }
     enum Mutation{
         case setUserID(String)
@@ -68,7 +67,7 @@ extension LoginReactor{
         case .autoLoginDidTap:
             return .just(.setAuthLogin)
         case .guestDidTap:
-            
+            steps.accept(APPJAMStep.mainTabbarIsRequired)
             return .empty()
         }
     }
@@ -100,7 +99,23 @@ extension LoginReactor{
 // MARK: - Method
 private extension LoginReactor{
     func loginDidTap() {
-        print("as")
+        let user = LoginUser(
+            userid: currentState.userID,
+            password: currentState.password
+        )
+        
+        NetworkManager.shared.putLogin(user)
+            .subscribe { [weak self] res in
+                print(res.description)
+                if res.statusCode == 200{
+                    self?.steps.accept(APPJAMStep.mainTabbarIsRequired)
+                } else if res.statusCode == 404{
+                    self?.steps.accept(APPJAMStep.errorAlert(title: "로그인이 실패했습니다", message: "아이디 또는 비밀번호가 잘못되었습니다."))
+                }
+            } onError: { err in
+                print(err.localizedDescription)
+            }
+            .disposed(by: disposeBag)
     }
     func loginValid() -> Bool{
         return currentState.userID.isEmpty == false && currentState.password.isEmpty == false

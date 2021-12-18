@@ -15,7 +15,7 @@ import RxSwift
 
 final class RegisterNicknameVC: baseVC<RegisterReactor>{
     // MARK: - Properties
-    private let logoImageView = UIImageView()
+    private let logoLabel = LogoLabel()
     
     private let descriptionLabel = RegisterLabel(text: "사용할 닉네임을 입력해주세요")
     
@@ -41,12 +41,12 @@ final class RegisterNicknameVC: baseVC<RegisterReactor>{
     // MARK: - UI
     override func addView() {
         [
-            logoImageView, descriptionLabel, nicknameTextField,
+            logoLabel, descriptionLabel, nicknameTextField,
             nextButton, dismissButton, exclamanationImageView, exclamanationLabel
         ].forEach{ view.addSubview($0) }
         
-        logoImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(bound.height*0.1584)
+        logoLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(bound.height*0.1484)
             $0.centerX.equalToSuperview()
         }
         descriptionLabel.snp.makeConstraints {

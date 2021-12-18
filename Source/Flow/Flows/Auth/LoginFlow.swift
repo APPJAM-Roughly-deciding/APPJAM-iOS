@@ -47,6 +47,10 @@ final class LoginFlow: Flow{
             return coordinateToLogin()
         case .registerNicknameIsRequired:
             return navigateToNicknameRegister()
+        case .mainTabbarIsRequired:
+            return .end(forwardToParentFlowWithStep: APPJAMStep.mainTabbarIsRequired)
+        case let .errorAlert(title, message):
+            return navigateToAlert(title: title, msg: title)
         default:
             return .none
         }
@@ -63,5 +67,11 @@ private extension LoginFlow{
     }
     func navigateToNicknameRegister() -> FlowContributors{
         return .end(forwardToParentFlowWithStep: APPJAMStep.registerNicknameIsRequired)
+    }
+    func navigateToAlert(title: String?, msg: String?) -> FlowContributors{
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        alert.addAction(.init(title: "확인", style: .cancel))
+        self.rootVC.present(alert, animated: true)
+        return .none
     }
 }

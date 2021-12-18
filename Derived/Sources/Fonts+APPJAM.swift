@@ -16,6 +16,12 @@
 
 // swiftlint:disable identifier_name line_length type_body_length
 public enum APPJAMFontFamily {
+  public enum GmarketSans {
+    public static let bold = APPJAMFontConvertible(name: "GmarketSansBold", family: "Gmarket Sans", path: "GmarketSansBold.otf")
+    public static let light = APPJAMFontConvertible(name: "GmarketSansLight", family: "Gmarket Sans", path: "GmarketSansLight.otf")
+    public static let medium = APPJAMFontConvertible(name: "GmarketSansMedium", family: "Gmarket Sans", path: "GmarketSansMedium.otf")
+    public static let all: [APPJAMFontConvertible] = [bold, light, medium]
+  }
   public enum NotoSansCJKKR {
     public static let black = APPJAMFontConvertible(name: "NotoSansCJKkr-Black", family: "Noto Sans CJK KR", path: "NotoSansCJKkr-Black.otf")
     public static let bold = APPJAMFontConvertible(name: "NotoSansCJKkr-Bold", family: "Noto Sans CJK KR", path: "NotoSansCJKkr-Bold.otf")
@@ -31,7 +37,7 @@ public enum APPJAMFontFamily {
     public static let regular = APPJAMFontConvertible(name: "NotoSansMonoCJKkr-Regular", family: "Noto Sans Mono CJK KR", path: "NotoSansMonoCJKkr-Regular.otf")
     public static let all: [APPJAMFontConvertible] = [bold, regular]
   }
-  public static let allCustomFonts: [APPJAMFontConvertible] = [NotoSansCJKKR.all, NotoSansMonoCJKKR.all].flatMap { $0 }
+  public static let allCustomFonts: [APPJAMFontConvertible] = [GmarketSans.all, NotoSansCJKKR.all, NotoSansMonoCJKKR.all].flatMap { $0 }
   public static func registerAllCustomFonts() {
     allCustomFonts.forEach { $0.register() }
   }
