@@ -18,4 +18,8 @@ enum APPJAMStep: Step{
     case registerNicknameIsRequired
     case registerIDIsRequired
     case registerPasswordIsRequired
+    
+    // Main
+    case mainTabbarIsRequired
+    
 }
