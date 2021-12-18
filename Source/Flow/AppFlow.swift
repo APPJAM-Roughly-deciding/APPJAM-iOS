@@ -49,6 +49,8 @@ final class AppFlow: Flow{
         switch step{
         case .loginIsRequired:
             return coordinateToLogin()
+        case .registerNicknameIsRequired:
+            return coordinateToRegister()
         default:
             return .none
         }
@@ -64,6 +66,14 @@ private extension AppFlow{
             self.rootWindow.rootViewController = root
         }
         let nextStep = OneStepper(withSingleStep: APPJAMStep.loginIsRequired)
+        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: nextStep))
+    }
+    func coordinateToRegister() -> FlowContributors{
+        let flow = RegisterFlow(with: .init())
+        Flows.use(flow, when: .created) { [unowned self] root in
+            self.rootWindow.rootViewController = root
+        }
+        let nextStep = OneStepper(withSingleStep: APPJAMStep.registerNicknameIsRequired)
         return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: nextStep))
     }
 }

@@ -28,7 +28,7 @@ final class AuthTextField: UITextField{
         self.layer.cornerRadius = 20
         self.layer.borderWidth = 1
         self.layer.borderColor = APPJAMAsset.dGrayColor.color.cgColor
-        
+        self.font = UIFont(font: APPJAMFontFamily.NotoSansCJKKR.regular, size: 16)
         self.leftSpacing(space: 20)
     }
 }

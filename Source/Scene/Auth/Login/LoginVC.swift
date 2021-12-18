@@ -102,30 +102,6 @@ final class LoginVC: baseVC<LoginReactor>{
         self.navigationController?.navigationBar.isHidden = true
     }
     
-    // MARK: - Keyboard
-    private func addObserver(){
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keybaordRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keybaordRectangle.height
-            UIView.animate(withDuration: 0.3, animations: {
-                self.view.transform = CGAffineTransform(translationX: 0, y: -keyboardHeight/2)
-                
-            })
-        }
-    }
-    @objc func keyboardWillHide(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.view.transform = .identity
-            })
-        }
-    }
-    
-    
     // MARK: - Reactor
     override func bindView(reactor: LoginReactor) {
         userIDTextField.rx.text
@@ -159,7 +135,9 @@ final class LoginVC: baseVC<LoginReactor>{
             .map { Reactor.Action.autoLoginDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+    }
+    
+    override func bindAction(reactor: LoginReactor) {
         userIDTextField.rx.controlEvent(.editingDidBegin)
             .map { APPJAMAsset.dMainColor.color.cgColor }
             .bind(to: userIDTextField.layer.rx.borderColor)
@@ -167,7 +145,7 @@ final class LoginVC: baseVC<LoginReactor>{
         
         userIDTextField.rx.controlEvent(.editingDidEnd)
             .map { reactor.currentState.isEmptyUserID }
-            .map { $0 ? APPJAMAsset.dGrayColor.color.cgColor : UIColor.black.cgColor}
+            .map { $0 ? APPJAMAsset.dGrayColor.color.cgColor : UIColor.black.cgColor }
             .bind(to: userIDTextField.layer.rx.borderColor)
             .disposed(by: disposeBag)
         
@@ -178,7 +156,7 @@ final class LoginVC: baseVC<LoginReactor>{
         
         passwordTextField.rx.controlEvent(.editingDidEnd)
             .map { reactor.currentState.isEmptyPassword }
-            .map { $0 ? APPJAMAsset.dGrayColor.color.cgColor : UIColor.black.cgColor}
+            .map { $0 ? APPJAMAsset.dGrayColor.color.cgColor : UIColor.black.cgColor }
             .bind(to: passwordTextField.layer.rx.borderColor)
             .disposed(by: disposeBag)
     }
@@ -211,7 +189,7 @@ final class LoginVC: baseVC<LoginReactor>{
         
         sharedState
             .map { $0.isValidLogin }
-            .map { $0 ? APPJAMAsset.dMainColor.color : UIColor(red: 0.862, green: 0.494, blue: 0.494, alpha: 1) }
+            .map { $0 ? APPJAMAsset.dMainColor.color : APPJAMAsset.dSubMainColor.color }
             .bind(to: loginButton.rx.backgroundColor)
             .disposed(by: disposeBag)
         
@@ -221,5 +199,28 @@ final class LoginVC: baseVC<LoginReactor>{
             .disposed(by: disposeBag)
         
             
+    }
+    
+    // MARK: - Keyboard
+    private func addObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keybaordRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keybaordRectangle.height
+            UIView.animate(withDuration: 0.3, animations: {
+                self.view.transform = CGAffineTransform(translationX: 0, y: -keyboardHeight/2)
+                
+            })
+        }
+    }
+    @objc func keyboardWillHide(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.view.transform = .identity
+            })
+        }
     }
 }

@@ -26,6 +26,8 @@ final class LoginFlow: Flow{
     let stepper: LoginStepper
     private let rootVC = UINavigationController()
     
+    private let registerReactor = RegisterReactor()
+    
     // MARK: - Init
     init(
         with stepper: LoginStepper
@@ -43,6 +45,8 @@ final class LoginFlow: Flow{
         switch step{
         case .loginIsRequired:
             return coordinateToLogin()
+        case .registerNicknameIsRequired:
+            return navigateToNicknameRegister()
         default:
             return .none
         }
@@ -56,5 +60,8 @@ private extension LoginFlow{
         let vc = LoginVC(reactor: reactor)
         self.rootVC.setViewControllers([vc], animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    }
+    func navigateToNicknameRegister() -> FlowContributors{
+        return .end(forwardToParentFlowWithStep: APPJAMStep.registerNicknameIsRequired)
     }
 }

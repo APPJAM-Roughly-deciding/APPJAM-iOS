@@ -11,7 +11,7 @@ import UIKit
 extension UIButton{
     func attributedTitle(firstPart: String, secondPart: String){
         let atts: [NSAttributedString.Key: Any] = [
-            .foregroundColor: APPJAMAsset.dGrayColor.color,
+            .foregroundColor: APPJAMAsset.dDeepGrayColor.color,
             .font: UIFont(font: APPJAMFontFamily.NotoSansCJKKR.regular, size: 14)
         ]
         let attributedTitle = NSMutableAttributedString(string: "\(firstPart) ", attributes: atts)

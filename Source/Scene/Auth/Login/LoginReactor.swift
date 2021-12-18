@@ -63,7 +63,7 @@ extension LoginReactor{
             loginDidTap()
             return .empty()
         case .toRegisterButtonDidTap:
-            print("as")
+            steps.accept(APPJAMStep.registerNicknameIsRequired)
             return .empty()
         case .autoLoginDidTap:
             return .just(.setAuthLogin)

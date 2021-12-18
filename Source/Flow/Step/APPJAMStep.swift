@@ -15,5 +15,7 @@ enum APPJAMStep: Step{
     
     // Auth
     case loginIsRequired
-    case registerIsRequired
+    case registerNicknameIsRequired
+    case registerIDIsRequired
+    case registerPasswordIsRequired
 }
