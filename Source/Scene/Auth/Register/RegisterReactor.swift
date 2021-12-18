@@ -22,17 +22,20 @@ final class RegisterReactor: Reactor, Stepper{
         case updateUserID(String)
         case updatePassword(String)
         case updateNickname(String)
+        case pwdVisiblityButtonDidTap
         case registerButtonDidTap
     }
     enum Mutation{
         case setUserID(String)
         case setPassword(String)
         case setNickname(String)
+        case setPwdVisible
     }
     struct State{
         var userID: String = ""
         var password: String = ""
         var nickname: String = ""
+        var isSecurePwd: Bool = false
     }
     
     var initialState: State = State()
@@ -49,6 +52,8 @@ extension RegisterReactor{
             return .just(.setPassword(pwd))
         case let .updateNickname(nick):
             return .just(.setNickname(nick))
+        case .pwdVisiblityButtonDidTap:
+            return .just(.setPwdVisible)
         case .registerButtonDidTap:
             
             return .empty()
@@ -67,6 +72,8 @@ extension RegisterReactor{
             newState.password = pwd
         case let .setNickname(nick):
             newState.nickname = nick
+        case .setPwdVisible:
+            newState.isSecurePwd = !currentState.isSecurePwd
         }
         return newState
     }

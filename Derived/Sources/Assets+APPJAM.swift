@@ -18,6 +18,8 @@
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum APPJAMAsset {
   public static let accentColor = APPJAMColors(name: "AccentColor")
+  public static let dGrayColor = APPJAMColors(name: "D_GrayColor")
+  public static let dMainColor = APPJAMColors(name: "D_MainColor")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
