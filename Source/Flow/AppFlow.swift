@@ -14,7 +14,9 @@ struct AppStepper: Stepper{
     private let disposeBag: DisposeBag = .init()
     
     func readyToEmitSteps() {
-        
+        Observable.just(APPJAMStep.loginIsRequired)
+            .bind(to: steps)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -42,9 +44,13 @@ final class AppFlow: Flow{
     // MARK: - Navigate
     
     func navigate(to step: Step) -> FlowContributors {
-        
+        guard let step = step.asAppJamStep else { return .none }
         
         switch step{
+        case .loginIsRequired:
+            return coordinateToLogin()
+        case .registerNicknameIsRequired:
+            return coordinateToRegister()
         default:
             return .none
         }
@@ -54,5 +60,21 @@ final class AppFlow: Flow{
 // MARK: - Method
 
 private extension AppFlow{
+    func coordinateToLogin() -> FlowContributors{
+        let flow = LoginFlow(with: .init())
+        Flows.use(flow, when: .created) { [unowned self] root in
+            self.rootWindow.rootViewController = root
+        }
+        let nextStep = OneStepper(withSingleStep: APPJAMStep.loginIsRequired)
+        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: nextStep))
+    }
+    func coordinateToRegister() -> FlowContributors{
+        let flow = RegisterFlow(with: .init())
+        Flows.use(flow, when: .created) { [unowned self] root in
+            self.rootWindow.rootViewController = root
+        }
+        let nextStep = OneStepper(withSingleStep: APPJAMStep.registerNicknameIsRequired)
+        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: nextStep))
+    }
 }
 
