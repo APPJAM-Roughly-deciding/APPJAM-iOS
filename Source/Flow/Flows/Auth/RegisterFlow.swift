@@ -52,6 +52,8 @@ final class RegisterFlow: Flow{
             return navigateToRegisterID()
         case .registerPasswordIsRequired:
             return navigateToRegisterPassword()
+        case let .alert(title, message):
+            return navigateToAlert(title: title, msg: message)
         default:
             return .none
         }
@@ -77,5 +79,13 @@ private extension RegisterFlow{
         let vc = RegisterPasswordVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    }
+    func navigateToAlert(title: String?, msg: String?) -> FlowContributors{
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        alert.addAction(.init(title: "확인", style: .default, handler: { _ in
+            _ = self.reactor.mutate(action: .toLogin)
+        }))
+        self.rootVC.present(alert, animated: true)
+        return .none
     }
 }

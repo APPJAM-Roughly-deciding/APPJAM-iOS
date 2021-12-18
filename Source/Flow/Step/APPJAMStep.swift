@@ -18,8 +18,11 @@ enum APPJAMStep: Step{
     case registerNicknameIsRequired
     case registerIDIsRequired
     case registerPasswordIsRequired
+    case errorAlert(title: String?, message: String?)
     
     // Main
     case mainTabbarIsRequired
-    
+    case homeIsRequired
+    case chatIsRequired
+    case profileIsRequired
 }

@@ -38,6 +38,7 @@ final class RegisterReactor: Reactor, Stepper{
         case pwdVisiblityButtonDidTap
         case registerButtonDidTap
         case dismissDidTap
+        case toLogin
     }
     enum Mutation{
         case setUserID(String)
@@ -78,7 +79,7 @@ extension RegisterReactor{
         case .pwdVisiblityButtonDidTap:
             return .just(.setPwdVisible)
         case .registerButtonDidTap:
-            
+            requestRegister()
             return .empty()
         case .dismissDidTap:
             steps.accept(APPJAMStep.loginIsRequired)
@@ -88,6 +89,9 @@ extension RegisterReactor{
             return .empty()
         case .toRegisterPasswordButtonDidTap:
             steps.accept(APPJAMStep.registerPasswordIsRequired)
+            return .empty()
+        case .toLogin:
+            steps.accept(APPJAMStep.loginIsRequired)
             return .empty()
         }
     }
@@ -159,7 +163,21 @@ private extension RegisterReactor{
         return (true, .none)
     }
     func requestRegister(){
-        // Reigster Task
-        steps.accept(APPJAMStep.loginIsRequired)
+        let user = RegisterUser(
+            userid: currentState.userID,
+            password: currentState.password,
+            nickname: currentState.nickname
+        )
+        NetworkManager.shared.postRegister(user)
+            .subscribe {[weak self] res in
+                if res.statusCode == 409{
+                    self?.steps.accept(APPJAMStep.errorAlert(title: "회원가입에 실패헀습니다", message: "아이디가 이미 존재합니다."))
+                }else if res.statusCode == 201{
+                    self?.steps.accept(APPJAMStep.alert(title: "회원가입에 성공하였습니다", message: "로그인 페이지로 이동합니다."))
+                }
+            } onError: { err in
+                print(err.localizedDescription)
+            }
+            .disposed(by: disposeBag)
     }
 }

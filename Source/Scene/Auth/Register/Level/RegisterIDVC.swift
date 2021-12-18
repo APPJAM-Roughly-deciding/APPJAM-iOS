@@ -14,7 +14,7 @@ import RxSwift
 
 final class RegisterIDVC: baseVC<RegisterReactor>{
     // MARK: - Properties
-    private let logoImageView = UIImageView()
+    private let logoLabel = LogoLabel()
     
     private let descriptionLabel = RegisterLabel(text: "사용할 아이디를 입력해주세요")
     
@@ -36,13 +36,13 @@ final class RegisterIDVC: baseVC<RegisterReactor>{
     // MARK: - UI
     override func addView() {
         [
-            logoImageView, descriptionLabel, IDTextField, nextButton,
+            logoLabel, descriptionLabel, IDTextField, nextButton,
             exclamanationLabel, exclamanationImageView
         ].forEach{ view.addSubview($0) }
     }
     override func setLayout() {
-        logoImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(bound.height*0.1584)
+        logoLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(bound.height*0.1484)
             $0.centerX.equalToSuperview()
         }
         descriptionLabel.snp.makeConstraints {

@@ -14,7 +14,7 @@ import RxKeyboard
 
 final class LoginVC: baseVC<LoginReactor>{
     // MARK: - Properties
-    private let logoImageView = UIImageView()
+    private let logoLabel = LogoLabel()
     
     private let userIDTextField = AuthTextField(placeholder: "id")
     
@@ -54,13 +54,13 @@ final class LoginVC: baseVC<LoginReactor>{
     // MARK: - UI
     override func addView() {
         [
-            logoImageView, authStack, pwdVisiblityButton, loginButton,
+            logoLabel, authStack, pwdVisiblityButton, loginButton,
             toRegisterButton, autoLoginButton, guestButton
         ].forEach{ view.addSubview($0) }
         
     }
     override func setLayout() {
-        logoImageView.snp.makeConstraints {
+        logoLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(bound.height*0.3)
             $0.centerX.equalToSuperview()
         }
@@ -133,6 +133,11 @@ final class LoginVC: baseVC<LoginReactor>{
         
         autoLoginButton.rx.tap
             .map { Reactor.Action.autoLoginDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        guestButton.rx.tap
+            .map {Reactor.Action.guestDidTap}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
