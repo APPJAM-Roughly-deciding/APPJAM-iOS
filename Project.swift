@@ -1,7 +1,7 @@
 import ProjectDescription
 
 let projectName = "APPJAM"
-let orginazationIden = "APPJAM"
+let orginazationIden = "baegteun"
 
 let project = Project(
     name: projectName,
